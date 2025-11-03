@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Devices Hub | Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0c111b;
+      color: #e4e4e4;
+    }
+
+    /* Header and Navbar */
+    header {
+      background: #0f1a2b;
+      text-align: center;
+      padding: 25px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      padding: 10px 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #ffa500;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url('https://images.unsplash.com/photo-1518770660439-4636190af475') center/cover no-repeat;
+      height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(12, 17, 27, 0.75);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      padding: 20px;
+    }
+
+    .hero-content h1 {
+      font-size: 2.8rem;
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 25px;
+      line-height: 1.6;
+    }
+
+    .hero-content a {
+      background: linear-gradient(90deg, #00ffff, #00ff7f);
+      padding: 12px 28px;
+      border-radius: 8px;
+      color: #0c111b;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .hero-content a:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    /* About Preview */
+    .about-preview {
+      max-width: 1000px;
+      margin: 80px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .about-preview h2 {
+      color: #00ff7f;
+      margin-bottom: 15px;
+    }
+
+    .about-preview p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #ccc;
+    }
+
+    /* Featured Products */
+    .featured {
+      max-width: 1100px;
+      margin: 80px auto;
+      text-align: center;
+    }
+
+    .featured h2 {
+      color: #00ffff;
+      margin-bottom: 30px;
+    }
+
+    .product-grid {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .product {
+      background: #14233b;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,255,255,0.1);
+      padding: 20px;
+      width: 280px;
+      transition: transform 0.3s;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .product h3 {
+      color: #00ffff;
+      margin: 10px 0;
+    }
+
+    .product p {
+      color: #bbb;
+      font-size: 0.95rem;
+    }
+
+    .product button {
+      background: linear-gradient(90deg, #00ffff, #00ff7f);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #0c111b;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .product button:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    footer {
+      background: #0f1a2b;
+      text-align: center;
+      padding: 15px;
+      margin-top: 60px;
+      color: #ccc;
+    }
+
+    @media (max-width: 900px) {
+      .hero-content h1 { font-size: 2rem; }
+      .product-grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Digital Devices Hub</h1>
+    <nav>
+      <nav>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="cart.html" class="cart-link">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cart-count">0</span>
+  </a>
+</nav>
+
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Explore the Future of Technology</h1>
+      <p>Discover the latest smartphones, laptops, and smart devices designed to make your life easier, faster, and smarter.</p>
+      <a href="products.html">Shop Now</a>
+    </div>
+  </section>
+
+  <section class="about-preview">
+    <h2>About Digital Devices Hub</h2>
+    <p>
+      We are a leading digital retail store dedicated to providing cutting-edge technology at affordable prices. 
+      Whether you’re looking for the latest smartphone or a high-performance laptop, we bring you the best from trusted global brands.
+    </p>
+  </section>
+
+  <section class="featured">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8" alt="Laptop">
+        <h3>Smart Laptop</h3>
+        <p>Powerful performance for work and play.</p>
+        <button>Buy Now</button>
+      </div>
+
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9" alt="Smartphone">
+        <h3>Pro Smartphone</h3>
+        <p>Experience speed, clarity, and innovation in your hand.</p>
+        <button>Buy Now</button>
+      </div>
+
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1581291519195-ef11498d1cf5" alt="Headphones">
+        <h3>Wireless Headphones</h3>
+        <p>Immersive sound and comfort for your daily routine.</p>
+        <button>Buy Now</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Digital Devices Hub. All rights reserved.</p>
+  </footer>
+</body>
+</html>

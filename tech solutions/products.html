@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Devices Hub | Products</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0c111b;
+      color: #e4e4e4;
+    }
+
+    /* Header and Navbar */
+    header {
+      background: #0f1a2b;
+      text-align: center;
+      padding: 25px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      padding: 10px 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #ffa500;
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(to right, #00ffff22, #00ff7f22);
+    }
+
+    .page-header h1 {
+      color: #00ffff;
+      font-size: 2.5rem;
+    }
+
+    .page-header p {
+      color: #ccc;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 10px auto 0;
+    }
+
+    /* Product Grid */
+    .product-grid {
+      max-width: 1100px;
+      margin: 60px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .product {
+      background: #14233b;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,255,255,0.1);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .product-content h3 {
+      color: #00ffff;
+      margin-bottom: 10px;
+    }
+
+    .product-content p {
+      font-size: 0.95rem;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 1.1rem;
+      color: #00ff7f;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .add-cart {
+      background: transparent;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+    }
+
+    .add-cart:hover {
+      background: #00ffff;
+      color: #0c111b;
+    }
+
+    .buy-now {
+      background: linear-gradient(90deg, #00ffff, #00ff7f);
+      color: #0c111b;
+    }
+
+    .buy-now:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    footer {
+      background: #0f1a2b;
+      text-align: center;
+      padding: 15px;
+      margin-top: 60px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Digital Devices Hub</h1>
+    <nav>
+     <nav>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="cart.html" class="cart-link">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cart-count">0</span>
+  </a>
+</nav>
+
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <h1>Our Products</h1>
+    <p>Explore our range of top-quality digital devices built for performance, reliability, and style.</p>
+  </section>
+
+  <section class="product-grid">
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8" alt="Laptop">
+      <div class="product-content">
+        <h3>Ultra Laptop Pro</h3>
+        <p>High-performance laptop for professionals and creators.</p>
+        <div class="price">$1,299</div>
+        <div class="buttons">
+          <button class="add-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9" alt="Smartphone">
+      <div class="product-content">
+        <h3>SmartPhone X</h3>
+        <p>Stunning camera and all-day battery with 5G speed.</p>
+        <div class="price">$899</div>
+        <div class="buttons">
+          <button class="add-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1581291519195-ef11498d1cf5" alt="Headphones">
+      <div class="product-content">
+        <h3>Wireless Headphones</h3>
+        <p>Experience immersive sound and long-lasting comfort.</p>
+        <div class="price">$299</div>
+        <div class="buttons">
+          <button class="add-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1589561084283-930aa7b1ce50" alt="Smartwatch">
+      <div class="product-content">
+        <h3>SmartWatch Z</h3>
+        <p>Track fitness, receive notifications, and more.</p>
+        <div class="price">$249</div>
+        <div class="buttons">
+          <button class="add-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" alt="Camera">
+      <div class="product-content">
+        <h3>Pro Camera Lens</h3>
+        <p>Capture professional photos with unmatched clarity.</p>
+        <div class="price">$1,099</div>
+        <div class="buttons">
+          <button class="add-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1573497019301-ccd5f9b8f6ee" alt="Tablet">
+      <div class="product-content">
+        <h3>Smart Tablet</h3>
+        <p>Lightweight, fast, and perfect for work or play.</p>
+        <div class="price">$599</div>
+        <div class="buttons">
+          <button class="add-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Digital Devices Hub. All rights reserved.</p>
+  </footer>
+  <script src="script.js"></script>
+
+</body>
+</html>

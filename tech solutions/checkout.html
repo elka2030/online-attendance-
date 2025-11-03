@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Digital Devices Hub</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background-color: #0c111b;
+      color: #e4e4e4;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    header {
+      width: 100%;
+      background: #14233b;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #00ffff;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    }
+
+    .checkout-container {
+      margin-top: 40px;
+      background: #14233b;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    .checkout-container h2 {
+      text-align: center;
+      color: #00ff7f;
+    }
+
+    .checkout-form label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .checkout-form input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 5px;
+    }
+
+    .order-summary {
+      margin-top: 25px;
+      background: #1b2f4f;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #2f476a;
+      padding: 5px 0;
+    }
+
+    .order-total {
+      text-align: right;
+      color: #00ff7f;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00ffff, #00ff7f);
+      color: #0c111b;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* ✅ Order success message */
+    .success-box {
+      display: none;
+      background: #14233b;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      color: #e4e4e4;
+      margin-top: 50px;
+      box-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .success-box h2 {
+      color: #00ff7f;
+    }
+
+    .success-box .order-number {
+      background: #1d2f4a;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: #ffa500;
+      font-size: 1.1rem;
+      margin: 15px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>Checkout | Digital Devices Hub</header>
+
+  <div class="checkout-container" id="checkout-section">
+    <h2>Complete Your Purchase</h2>
+
+    <form id="checkout-form" class="checkout-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="payment">Payment Method</label>
+      <select id="payment" required>
+        <option value="">Select a method</option>
+        <option value="Credit Card">Credit Card</option>
+        <option value="PayPal">PayPal</option>
+        <option value="M-Pesa">M-Pesa</option>
+      </select>
+
+      <div class="order-summary" id="order-summary">
+        <h3>Order Summary</h3>
+        <!-- Cart items will load here -->
+      </div>
+
+      <p class="order-total" id="form-total">Total: $0.00</p>
+
+      <button type="button" id="place-order">Place Order</button>
+      <button type="button" id="back-to-cart">Back to Cart</button>
+    </form>
+  </div>
+
+  <!-- ✅ Order Successful Box -->
+  <div class="success-box" id="success-box">
+    <i class="fas fa-check-circle" style="font-size: 3rem; color: #00ff7f;"></i>
+    <h2>Order Successful!</h2>
+    <p>Thank you, <span id="customer-name">Customer</span> 🛍️</p>
+    <div class="order-number" id="order-number">Order #12345</div>
+    <p>Total Paid: <span id="order-total">$0.00</span></p>
+    <p id="redirect-msg">Redirecting to home in <span id="countdown">10</span> seconds...</p>
+  </div>
+
+  <script>
+    // Load cart
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const summary = document.getElementById('order-summary');
+    const form = document.getElementById('checkout-form');
+    const formTotal = document.getElementById('form-total');
+    const checkoutSection = document.getElementById('checkout-section');
+    const successBox = document.getElementById('success-box');
+
+    // Render checkout items
+    function renderCheckout() {
+      summary.innerHTML = "<h3>Order Summary</h3>";
+      let total = 0;
+
+      if (cart.length === 0) {
+        summary.innerHTML += "<p>Your cart is empty.</p>";
+        formTotal.textContent = "Total: $0.00";
+        return;
+      }
+
+      cart.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('order-item');
+        div.innerHTML = `<span>${item.name}</span><span>${item.price}</span>`;
+        summary.appendChild(div);
+        total += parseFloat(item.price.replace('$', ''));
+      });
+
+      const totalDiv = document.createElement('div');
+      totalDiv.classList.add('order-total');
+      totalDiv.textContent = "Total: $" + total.toFixed(2);
+      summary.appendChild(totalDiv);
+      formTotal.textContent = "Total: $" + total.toFixed(2);
+    }
+
+    // Handle order success
+    document.getElementById('place-order').addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      if (!form.checkValidity()) {
+        alert("Please fill all required fields.");
+        return;
+      }
+
+      // Hide form, show success
+      checkoutSection.style.display = "none";
+      successBox.style.display = "block";
+
+      // Fill success data
+      const name = document.getElementById('name').value;
+      const total = formTotal.textContent.replace('Total: ', '');
+      const orderNum = Math.floor(10000 + Math.random() * 90000);
+
+      document.getElementById('customer-name').textContent = name;
+      document.getElementById('order-total').textContent = total;
+      document.getElementById('order-number').textContent = "Order #" + orderNum;
+
+      // Clear cart
+      localStorage.removeItem('cart');
+
+      // Redirect countdown
+      let timeLeft = 10;
+      const countdown = document.getElementById('countdown');
+      const timer = setInterval(() => {
+        timeLeft--;
+        countdown.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          window.location.href = "index.html";
+        }
+      }, 1000);
+    });
+
+    // Back to cart
+    document.getElementById('back-to-cart').addEventListener('click', () => {
+      window.location.href = "cart.html";
+    });
+
+    window.addEventListener('load', renderCheckout);
+  </script>
+
+</body>
+</html>

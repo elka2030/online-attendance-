@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation | Digital Devices Hub</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background-color: #0c111b;
+      color: #e4e4e4;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    .confirmation-box {
+      background: #14233b;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      max-width: 700px;
+      width: 90%;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .confirmation-box h1 {
+      color: #00ff7f;
+      margin-bottom: 15px;
+    }
+
+    .confirmation-box p {
+      color: #e4e4e4;
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .confirmation-box span {
+      color: #00ffff;
+      font-weight: bold;
+    }
+
+    .order-number {
+      background: #1d2f4a;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      color: #ffa500;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    .order-summary {
+      text-align: left;
+      margin-top: 20px;
+      background: #1b2f4f;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      border-bottom: 1px solid #2f476a;
+      padding-bottom: 5px;
+    }
+
+    .order-total {
+      text-align: right;
+      font-weight: 700;
+      color: #00ff7f;
+      margin-top: 10px;
+      font-size: 1.1rem;
+    }
+
+    .home-btn {
+      background: linear-gradient(90deg, #00ffff, #00ff7f);
+      border: none;
+      color: #0c111b;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+
+    .home-btn:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    #redirect-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #aaa;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confirmation-box">
+    <i class="fas fa-check-circle" style="font-size: 3rem; color: #00ff7f;"></i>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you, <span id="customer-name">Customer</span> 🛍️</p>
+    <p>Your order has been successfully placed.</p>
+    <div class="order-number" id="order-number">Order #12345</div>
+
+    <div class="order-summary" id="order-summary">
+      <h3>Items Purchased</h3>
+      <!-- Items will appear here dynamically -->
+    </div>
+
+    <p>Total Paid: <span id="order-total">$0.00</span></p>
+    <p>We’ll send you a confirmation email shortly.</p>
+
+    <button class="home-btn" id="go-home">Return to Home</button>
+    <p id="redirect-msg">Redirecting to home in <span id="countdown">10</span> seconds...</p>
+  </div>
+
+  <script>
+    // Retrieve details from checkout
+    const orderData = JSON.parse(localStorage.getItem('orderData')) || {};
+    const cartItems = JSON.parse(localStorage.getItem('cartSnapshot')) || [];
+    const summary = document.getElementById('order-summary');
+
+    // Fill in customer info
+    document.getElementById('customer-name').textContent = orderData.name || "Customer";
+    document.getElementById('order-total').textContent = orderData.total || "$0.00";
+
+    // Generate a random order number
+    const orderNum = Math.floor(10000 + Math.random() * 90000);
+    document.getElementById('order-number').textContent = "Order #" + orderNum;
+
+    // Render purchased items
+    if (cartItems.length > 0) {
+      cartItems.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('order-item');
+        div.innerHTML = `
+          <span>${item.name}</span>
+          <span>${item.price}</span>
+        `;
+        summary.appendChild(div);
+      });
+    } else {
+      summary.innerHTML += "<p>No items found in your order.</p>";
+    }
+
+    // Cleanup storage
+    localStorage.removeItem('cart');
+    localStorage.removeItem('orderData');
+    localStorage.removeItem('cartSnapshot');
+
+    // Manual home redirect
+    document.getElementById('go-home').addEventListener('click', () => {
+      window.location.href = "index.html";
+    });
+
+    // Countdown redirect
+    let timeLeft = 10;
+    const countdownEl = document.getElementById('countdown');
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdownEl.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        window.location.href = "index.html";
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>

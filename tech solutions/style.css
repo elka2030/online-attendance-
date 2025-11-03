@@ -1,0 +1,222 @@
+/* 🌈 ============= Root Colors & General Styles ============= */
+:root {
+  --accent1: #ff6b6b;
+  --accent2: #ffd166;
+  --accent3: #6bf3ff;
+  --bg: #0f1724;
+  --card: #18263b;
+  --text: #e6eef6;
+  --muted: #9aa4b2;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #071026, #071a2a);
+  color: var(--text);
+}
+
+/* 🧱 ============= Layout Wrap ============= */
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 🧭 ============= Header + Navbar ============= */
+header {
+  position: sticky;
+  top: 0;
+  background: rgba(15, 23, 36, 0.95);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  background: var(--accent1);
+  color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 🌐 Navbar links */
+nav {
+  display: flex;
+  gap: 25px;
+}
+
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+  color: var(--accent2);
+}
+
+nav a.active {
+  color: var(--accent3);
+  border-bottom: 2px solid var(--accent3);
+}
+
+/* 🔘 Header buttons */
+.controls {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  background: var(--accent1);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: var(--accent2);
+  color: #000;
+}
+
+/* 💬 ============= Main Content ============= */
+main {
+  flex: 1;
+  padding: 60px 40px;
+}
+
+/* 🏠 Home Page */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 70vh;
+  background: radial-gradient(circle at center, #18263b 0%, #0f1724 100%);
+  border-radius: 16px;
+  padding: 40px;
+}
+
+.hero h1 {
+  color: var(--accent2);
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+/* 🛍 Products Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.grid .card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.grid .card:hover {
+  transform: translateY(-5px);
+}
+
+.grid img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* 📩 Contact Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Cart icon styling */
+.cart-link {
+  position: relative;
+  display: inline-block;
+  color: #00ffff;
+  text-decoration: none;
+  padding: 10px 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.cart-link:hover {
+  color: #ffa500;
+}
+
+.cart-link i {
+  font-size: 1.2rem;
+}
+
+#cart-count {
+  background: #ff3b3b;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 7px;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0;
+  right: 5px;
+}
+
+
+input, textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* 🦶 Footer */
+footer {
+  text-align: center;
+  background: #0b1320;
+  padding: 20px;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: auto;
+}

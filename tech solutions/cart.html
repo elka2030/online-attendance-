@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart | Digital Devices Hub</title>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background: #0c111b;
+      color: #e4e4e4;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0f1a2b;
+      text-align: center;
+      padding: 25px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      padding: 10px 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #ffa500;
+    }
+
+    /* Cart icon and counter */
+    .cart-link {
+      position: relative;
+      display: inline-block;
+    }
+
+    .cart-link i {
+      font-size: 1.2rem;
+    }
+
+    #cart-count {
+      background: #ff3b3b;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 7px;
+      font-size: 0.8rem;
+      position: absolute;
+      top: 0;
+      right: -10px;
+    }
+
+    h1 {
+      color: #00ffff;
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .cart-container {
+      max-width: 900px;
+      margin: auto;
+      background: #14233b;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1d2f4a;
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .cart-item h3 {
+      margin: 0;
+      color: #00ffff;
+      flex: 1;
+      margin-left: 15px;
+    }
+
+    .cart-item .price {
+      font-weight: bold;
+      color: #00ff7f;
+      margin-right: 20px;
+    }
+
+    .remove-btn {
+      background: none;
+      border: 2px solid #ff3b3b;
+      color: #ff3b3b;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .remove-btn:hover {
+      background: #ff3b3b;
+      color: white;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #00ff7f;
+      margin-top: 20px;
+    }
+
+    .checkout {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background: linear-gradient(90deg, #00ffff, #00ff7f);
+      color: #0c111b;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .checkout:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Digital Devices Hub</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html" class="cart-link active">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <h1>Your Shopping Cart</h1>
+
+  <div class="cart-container" id="cart-container">
+    <!-- Cart items appear here -->
+  </div>
+
+  <div class="total" id="total">Total: $0</div>
+  <button class="checkout">Proceed to Checkout</button>
+
+  <script>
+   let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  const cartContainer = document.getElementById('cart-container');
+  const totalElement = document.getElementById('total');
+  const countElement = document.getElementById('cart-count');
+
+  function renderCart() {
+    cartContainer.innerHTML = "";
+    if (cart.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty 😢</p>";
+      totalElement.textContent = "Total: $0";
+      countElement.textContent = "0";
+      return;
+    }
+
+    let total = 0;
+    cart.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.classList.add('cart-item');
+      div.innerHTML = `
+        <img src="${item.image}" alt="${item.name}">
+        <h3>${item.name}</h3>
+        <div class="price">${item.price}</div>
+        <button class="remove-btn" data-index="${index}">Remove</button>
+      `;
+      cartContainer.appendChild(div);
+
+      total += parseFloat(item.price.replace('$', '').trim());
+    });
+
+    totalElement.textContent = `Total: $${total.toFixed(2)}`;
+    countElement.textContent = cart.length;
+
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const index = e.target.getAttribute('data-index');
+        removeFromCart(index);
+      });
+    });
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+  }
+
+  // ✅ UPDATED checkout button logic
+  document.querySelector('.checkout').addEventListener('click', () => {
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+    } else {
+      window.location.href = "checkout.html";
+    }
+  });
+
+  renderCart();
+  </script>
+
+</body>
+</html>

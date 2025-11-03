@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmation - Digital Devices Hub</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e90ff, #00bfff);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .confirmation-box {
+      background: white;
+      color: #333;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 40px;
+      animation: popIn 0.8s ease;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    h1 {
+      color: #1e90ff;
+      margin-bottom: 10px;
+    }
+    .order-id {
+      background: #1e90ff;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 20px 0;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .total {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    button {
+      background: #1e90ff;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #007acc;
+    }
+  </style>
+</head>
+<body>
+  <div class="confirmation-box">
+    <h1>🎉 Thank You!</h1>
+    <p id="thank-you-message">Your order has been placed successfully.</p>
+    <div class="order-id" id="order-id"></div>
+    <div class="total" id="order-total"></div>
+    <button id="back-home">Back to Home</button>
+  </div>
+
+  <script>
+    // Get user data (if available)
+    const formData = JSON.parse(localStorage.getItem('checkoutForm')) || {};
+    const name = formData.name || 'Valued Customer';
+
+    // Create personalized message
+    document.getElementById('thank-you-message').innerHTML = 
+      `Thank you, <strong>${name}</strong>! Your order has been placed successfully.`;
+
+    // Generate a random order ID
+    const orderId = '#DDH' + Math.floor(Math.random() * 90000 + 10000);
+    document.getElementById('order-id').textContent = 'Order ID: ' + orderId;
+
+    // Get total from last order (before clearing cart)
+    const lastTotal = localStorage.getItem('lastTotal') || '0.00';
+    document.getElementById('order-total').textContent = `Total Paid: $${lastTotal}`;
+
+    // Clear all stored data after showing confirmation
+    localStorage.removeItem('cart');
+    localStorage.removeItem('checkoutForm');
+    localStorage.removeItem('lastTotal');
+
+    // Button redirect
+    document.getElementById('back-home').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
