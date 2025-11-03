@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Library Management System</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #007bff, #28a745);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      width: 400px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      color: #007bff;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: gray;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .toggle {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .toggle span {
+      color: #007bff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 12px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="loginContainer">
+    <h1>📚 Library System</h1>
+    <p>Login to your account</p>
+
+    <input type="text" id="loginName" placeholder="Enter name" />
+    <input type="password" id="loginPassword" placeholder="Enter password" />
+
+    <button onclick="login()">Login</button>
+
+    <div class="toggle">
+      Don't have an account? <span onclick="toggleForm()">Register</span>
+    </div>
+
+    <footer>© 2025 Library Management System</footer>
+  </div>
+
+  <div class="container hidden" id="registerContainer">
+    <h1>📖 Create Account</h1>
+    <p>Register as User or Admin</p>
+
+    <input type="text" id="registerName" placeholder="Enter name" />
+    <input type="password" id="registerPassword" placeholder="Enter password" />
+    <select id="registerRole">
+      <option value="User">User</option>
+      <option value="Admin">Admin</option>
+    </select>
+
+    <button onclick="register()">Register</button>
+
+    <div class="toggle">
+      Already have an account? <span onclick="toggleForm()">Login</span>
+    </div>
+
+    <footer>© 2025 Library Management System</footer>
+  </div>
+
+  <script>
+    function toggleForm() {
+      document.getElementById("loginContainer").classList.toggle("hidden");
+      document.getElementById("registerContainer").classList.toggle("hidden");
+    }
+
+    function register() {
+      const name = document.getElementById("registerName").value.trim();
+      const password = document.getElementById("registerPassword").value.trim();
+      const role = document.getElementById("registerRole").value;
+
+      if (!name || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (users.find(u => u.name === name)) {
+        alert("User already exists.");
+        return;
+      }
+
+      users.push({ name, password, role });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Registration successful! Please log in.");
+      toggleForm();
+    }
+
+    function login() {
+      const name = document.getElementById("loginName").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find(u => u.name === name && u.password === password);
+
+      if (!user) {
+        alert("Invalid name or password.");
+        return;
+      }
+
+      localStorage.setItem("currentUser", JSON.stringify(user));
+
+      if (user.role === "Admin") {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "user.html";
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="popup.css">
+<script src="popup.js"></script>
+
+</body>
+
+</html>

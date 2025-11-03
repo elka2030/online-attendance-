@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Dashboard - Library Management</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f2f3f7;
+      margin: 0;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(135deg, #28a745, #007bff);
+      color: white;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      padding: 12px 20px;
+      text-decoration: none;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-left: 5px solid white;
+    }
+
+    /* Main area */
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+      width: calc(100% - 220px);
+    }
+
+    header {
+      background: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      color: #28a745;
+      font-size: 22px;
+    }
+
+    button {
+      background: #28a745;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+    }
+
+    button:hover {
+      background: #007bff;
+    }
+
+    .logout {
+      background: crimson;
+    }
+
+    .logout:hover {
+      background: darkred;
+    }
+
+    input {
+      width: 95%;
+      padding: 8px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .status {
+      font-weight: bold;
+      color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>📘 User Panel</h2>
+    <a href="#" class="active" onclick="showSection('books', this)">Available Books</a>
+    <a href="#" onclick="showSection('history', this)">My Borrowed Books</a>
+    <a href="#" onclick="logout()" class="logout">Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <header>
+      <h1>Welcome, <span id="userName"></span> 👋</h1>
+      <button class="logout" onclick="logout()">Logout</button>
+    </header>
+
+    <!-- Available Books Section -->
+    <div id="books" class="section active">
+      <div class="card">
+        <h2>Available Books</h2>
+        <input type="text" id="searchInput" placeholder="Search for a book..." onkeyup="searchBooks()">
+        <table id="booksTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- My Borrowing History Section -->
+    <div id="history" class="section">
+      <div class="card">
+        <h2>My Borrowed Books</h2>
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>Book Title</th>
+              <th>Date Borrowed</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let books = JSON.parse(localStorage.getItem("books")) || [];
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+
+    if (!currentUser || currentUser.role !== "User") {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("userName").textContent = currentUser.name;
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "index.html";
+    }
+
+    function showSection(id, element) {
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+
+      document.querySelectorAll(".sidebar a").forEach(link => link.classList.remove("active"));
+      element.classList.add("active");
+    }
+
+    function displayBooks() {
+      const tableBody = document.querySelector("#booksTable tbody");
+      tableBody.innerHTML = "";
+
+      books.forEach((book, index) => {
+        const isBorrowed = book.borrowedBy && book.borrowedBy !== currentUser.name;
+        const userBorrowed = book.borrowedBy === currentUser.name;
+        tableBody.innerHTML += `
+          <tr>
+            <td>${book.title}</td>
+            <td>${book.author}</td>
+            <td class="status">${book.borrowedBy ? (userBorrowed ? "You borrowed this" : "Borrowed") : "Available"}</td>
+            <td>
+              ${
+                book.borrowedBy
+                  ? userBorrowed
+                    ? `<button onclick="returnBook(${index})">Return</button>`
+                    : `<button disabled>Unavailable</button>`
+                  : `<button onclick="borrowBook(${index})">Borrow</button>`
+              }
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function borrowBook(index) {
+      const book = books[index];
+      if (book.borrowedBy) {
+        alert("This book is already borrowed.");
+        return;
+      }
+
+      book.borrowedBy = currentUser.name;
+      books[index] = book;
+
+      const borrowDate = new Date().toLocaleDateString();
+      history.push({ user: currentUser.name, book: book.title, date: borrowDate });
+      localStorage.setItem("books", JSON.stringify(books));
+      localStorage.setItem("history", JSON.stringify(history));
+
+      displayBooks();
+      displayHistory();
+      alert(`You borrowed "${book.title}"`);
+    }
+
+    function returnBook(index) {
+      const book = books[index];
+      if (book.borrowedBy !== currentUser.name) {
+        alert("You can only return your own borrowed books.");
+        return;
+      }
+
+      book.borrowedBy = null;
+      books[index] = book;
+      localStorage.setItem("books", JSON.stringify(books));
+
+      displayBooks();
+      displayHistory();
+      alert(`You returned "${book.title}"`);
+    }
+
+    function displayHistory() {
+      const userHistory = history.filter(h => h.user === currentUser.name);
+      const tableBody = document.querySelector("#historyTable tbody");
+      tableBody.innerHTML = "";
+
+      userHistory.forEach(entry => {
+        tableBody.innerHTML += `
+          <tr>
+            <td>${entry.book}</td>
+            <td>${entry.date}</td>
+            <td><button onclick="returnBookByTitle('${entry.book}')">Return</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function returnBookByTitle(title) {
+      const bookIndex = books.findIndex(b => b.title === title && b.borrowedBy === currentUser.name);
+      if (bookIndex > -1) {
+        books[bookIndex].borrowedBy = null;
+        localStorage.setItem("books", JSON.stringify(books));
+        displayBooks();
+        displayHistory();
+        alert(`You returned "${title}"`);
+      }
+    }
+
+    function searchBooks() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#booksTable tbody tr");
+
+      rows.forEach(row => {
+        const title = row.cells[0].textContent.toLowerCase();
+        const author = row.cells[1].textContent.toLowerCase();
+        row.style.display = title.includes(searchValue) || author.includes(searchValue) ? "" : "none";
+      });
+    }
+
+    // Initialize
+    displayBooks();
+    displayHistory();
+  </script>
+  <link rel="stylesheet" href="popup.css">
+<script src="popup.js"></script>
+
+</body>
+</html>

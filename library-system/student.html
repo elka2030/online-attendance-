@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h2>Student Dashboard</h2>
+  <p>Welcome, <span id="studentName"></span></p>
+
+  <h3>Available Books</h3>
+  <ul id="availableBooks"></ul>
+
+  <h3>Your Borrowed Books</h3>
+  <ul id="borrowedBooks"></ul>
+
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script src="script.js"></script>
+<script>
+const student = JSON.parse(localStorage.getItem("currentUser"));
+if (!student || student.role !== "Student") {
+  window.location.href = "index.html";
+}
+
+document.getElementById("studentName").textContent = student.name;
+
+function displayBooks() {
+  const books = JSON.parse(localStorage.getItem("books")) || [];
+  const availableList = document.getElementById("availableBooks");
+  const borrowedList = document.getElementById("borrowedBooks");
+
+  availableList.innerHTML = "";
+  borrowedList.innerHTML = "";
+
+  books.forEach(book => {
+    if (book.available) {
+      availableList.innerHTML += `
+        <li>${book.title} by ${book.author} 
+          <button onclick="borrowBook(${book.id})">Borrow</button>
+        </li>`;
+    } else if (book.borrower === student.name) {
+      borrowedList.innerHTML += `
+        <li>${book.title} by ${book.author}
+          <button onclick="returnBook(${book.id})">Return</button>
+        </li>`;
+    }
+  });
+}
+
+function borrowBook(id) {
+  const books = JSON.parse(localStorage.getItem("books")) || [];
+  const book = books.find(b => b.id === id);
+  if (book && book.available) {
+    book.available = false;
+    book.borrower = student.name;
+    localStorage.setItem("books", JSON.stringify(books));
+    alert(`You borrowed "${book.title}"`);
+    displayBooks();
+  }
+}
+
+function returnBook(id) {
+  const books = JSON.parse(localStorage.getItem("books")) || [];
+  const book = books.find(b => b.id === id);
+  if (book && book.borrower === student.name) {
+    book.available = true;
+    book.borrower = null;
+    localStorage.setItem("books", JSON.stringify(books));
+    alert(`You returned "${book.title}"`);
+    displayBooks();
+  }
+}
+
+displayBooks();
+</script>
+<link rel="stylesheet" href="popup.css">
+<script src="popup.js"></script>
+
+</body>
+</html>

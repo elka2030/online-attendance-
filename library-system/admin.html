@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Library Management</title>
+  <link rel="stylesheet" href="popup.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #f5f6fa;
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #1e1e2f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding-top: 30px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 14px 20px;
+      display: block;
+      transition: 0.3s;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background: #007bff;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #addBookForm {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    #addBookForm input {
+      padding: 8px;
+      margin-right: 10px;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .logout {
+      margin: 20px;
+      background: #dc3545;
+    }
+
+    .charts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    canvas {
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+  <link rel="stylesheet" href="analytics.css" />
+
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>📚 Admin</h2>
+    <a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a>
+    <a href="#" onclick="showSection('books')">Books</a>
+    <a href="#" onclick="showSection('users')">Users</a>
+    <a href="#" onclick="showSection('history')">History</a>
+    <a href="#" onclick="showSection('analytics')">Analytics</a>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="main">
+    <!-- Dashboard -->
+    <section id="dashboard">
+      <h2>Dashboard Overview</h2>
+      <div class="dashboard-cards">
+        <div class="card">
+          <h3 id="totalBooks">0</h3>
+          <p>Total Books</p>
+        </div>
+        <div class="card">
+          <h3 id="totalUsers">0</h3>
+          <p>Total Users</p>
+        </div>
+        <div class="card">
+          <h3 id="borrowedBooks">0</h3>
+          <p>Borrowed Books</p>
+        </div>
+        <div class="card">
+          <h3 id="activeBorrowers">0</h3>
+          <p>Active Borrowers</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Books -->
+    <section id="books" style="display:none;">
+      <h2>Manage Books</h2>
+      <div id="addBookForm">
+        <input type="text" id="bookTitle" placeholder="Book Title" />
+        <input type="text" id="bookAuthor" placeholder="Author" />
+        <button onclick="addBook()">Add Book</button>
+      </div>
+      <table id="booksTable">
+        <thead>
+          <tr><th>Title</th><th>Author</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Users -->
+    <section id="users" style="display:none;">
+      <h2>Registered Users</h2>
+      <table id="usersTable">
+        <thead><tr><th>Name</th><th>Role</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- History -->
+    <section id="history" style="display:none;">
+      <h2>Borrowing History</h2>
+      <table id="historyTable">
+        <thead><tr><th>User</th><th>Book</th><th>Date</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Analytics -->
+    <section id="analytics" style="display:none;">
+      <h2>Analytics Dashboard</h2>
+      <div class="charts-container">
+        <canvas id="booksChart"></canvas>
+        <canvas id="usersChart"></canvas>
+        <canvas id="borrowTrendChart"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    let books = JSON.parse(localStorage.getItem("books")) || [];
+
+    if (!currentUser || currentUser.role !== "Admin") {
+      window.location.href = "index.html";
+    }
+
+    // Navigation
+    function showSection(id) {
+      document.querySelectorAll(".main section").forEach(s => s.style.display = "none");
+      document.getElementById(id).style.display = "block";
+      document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
+      const activeLink = Array.from(document.querySelectorAll(".sidebar a")).find(a => a.textContent.toLowerCase().includes(id));
+      if (activeLink) activeLink.classList.add("active");
+      if (id === "analytics") updateCharts();
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      showPopup("Logged out successfully.", "info");
+      setTimeout(() => window.location.href = "index.html", 800);
+    }
+
+    function addBook() {
+      const title = document.getElementById("bookTitle").value.trim();
+      const author = document.getElementById("bookAuthor").value.trim();
+      if (!title || !author) return showPopup("Please fill in all fields.", "error");
+      books.push({ title, author, borrowedBy: null });
+      localStorage.setItem("books", JSON.stringify(books));
+      displayBooks();
+      updateDashboard();
+      updateCharts();
+      showPopup(`"${title}" added successfully!`, "success");
+    }
+
+    function deleteBook(index) {
+      books.splice(index, 1);
+      localStorage.setItem("books", JSON.stringify(books));
+      displayBooks();
+      updateDashboard();
+      updateCharts();
+      showPopup("Book deleted successfully.", "success");
+    }
+
+    function displayBooks() {
+      const tbody = document.querySelector("#booksTable tbody");
+      tbody.innerHTML = "";
+      books.forEach((book, i) => {
+        tbody.innerHTML += `<tr><td>${book.title}</td><td>${book.author}</td><td>${book.borrowedBy ? book.borrowedBy : "Available"}</td><td><button onclick="deleteBook(${i})">Delete</button></td></tr>`;
+      });
+    }
+
+    function displayUsers() {
+      const tbody = document.querySelector("#usersTable tbody");
+      tbody.innerHTML = "";
+      users.forEach(u => {
+        tbody.innerHTML += `<tr><td>${u.name}</td><td>${u.role}</td></tr>`;
+      });
+    }
+
+    function displayHistory() {
+      const tbody = document.querySelector("#historyTable tbody");
+      const history = JSON.parse(localStorage.getItem("history")) || [];
+      tbody.innerHTML = "";
+      history.forEach(h => {
+        tbody.innerHTML += `<tr><td>${h.user}</td><td>${h.book}</td><td>${h.date}</td></tr>`;
+      });
+    }
+
+    function updateDashboard() {
+      const borrowed = books.filter(b => b.borrowedBy).length;
+      const borrowers = [...new Set(books.filter(b => b.borrowedBy).map(b => b.borrowedBy))].length;
+      document.getElementById("totalBooks").textContent = books.length;
+      document.getElementById("totalUsers").textContent = users.length;
+      document.getElementById("borrowedBooks").textContent = borrowed;
+      document.getElementById("activeBorrowers").textContent = borrowers;
+    }
+
+    // CHARTS
+    let booksChart, usersChart, borrowTrendChart;
+
+    function updateCharts() {
+      const history = JSON.parse(localStorage.getItem("history")) || [];
+      const borrowed = books.filter(b => b.borrowedBy).length;
+      const available = books.length - borrowed;
+
+      const ctx1 = document.getElementById("booksChart").getContext("2d");
+      if (booksChart) booksChart.destroy();
+      booksChart = new Chart(ctx1, {
+        type: "doughnut",
+        data: {
+          labels: ["Borrowed", "Available"],
+          datasets: [{ data: [borrowed, available], backgroundColor: ["#007bff", "#28a745"] }]
+        },
+        options: { plugins: { legend: { position: "bottom" } } }
+      });
+
+      const admins = users.filter(u => u.role === "Admin").length;
+      const normal = users.length - admins;
+      const ctx2 = document.getElementById("usersChart").getContext("2d");
+      if (usersChart) usersChart.destroy();
+      usersChart = new Chart(ctx2, {
+        type: "bar",
+        data: {
+          labels: ["Admins", "Users"],
+          datasets: [{ label: "User Roles", data: [admins, normal], backgroundColor: ["#6f42c1", "#17a2b8"] }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+      });
+
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const monthData = Array(12).fill(0);
+      history.forEach(h => {
+        const m = new Date(h.date).getMonth();
+        monthData[m]++;
+      });
+
+      const ctx3 = document.getElementById("borrowTrendChart").getContext("2d");
+      if (borrowTrendChart) borrowTrendChart.destroy();
+      borrowTrendChart = new Chart(ctx3, {
+        type: "line",
+        data: {
+          labels: months,
+          datasets: [{ label: "Books Borrowed per Month", data: monthData, borderColor: "#007bff", fill: false }]
+        }
+      });
+    }
+
+    window.addEventListener("storage", e => {
+      if (["books", "history"].includes(e.key)) {
+        books = JSON.parse(localStorage.getItem("books")) || [];
+        displayBooks();
+        displayHistory();
+        updateDashboard();
+        updateCharts();
+      }
+    });
+
+    displayBooks();
+    displayUsers();
+    displayHistory();
+    updateDashboard();
+  </script>
+</body>
+</html>

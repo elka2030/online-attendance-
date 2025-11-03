@@ -1,0 +1,84 @@
+/* popup.css */
+.popup {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background: #333;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.popup.success {
+  background: #28a745;
+}
+
+.popup.error {
+  background: #dc3545;
+}
+
+.popup.info {
+  background: #007bff;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+}
+
+.confirm-box {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  width: 300px;
+}
+
+.confirm-box p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.confirm-box .buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-box button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.confirm-box button.yes {
+  background: #28a745;
+  color: white;
+}
+
+.confirm-box button.no {
+  background: #dc3545;
+  color: white;
+}
