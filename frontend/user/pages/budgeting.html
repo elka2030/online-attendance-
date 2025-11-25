@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Management - Expense Manager</title>
+    <link rel="stylesheet" href="../css/budgeting.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 Expense Manager</h1>
+                <div class="user-info">
+                    <span id="welcomeMessage">Welcome, User!</span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+            <a href="expense-tracking.html" class="nav-link">💸 Expenses</a>
+            <a href="income-management.html" class="nav-link">💰 Income</a>
+            <a href="budgeting.html" class="nav-link active">🎯 Budget</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Budget Overview -->
+            <section class="overview-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Budget Overview</h3>
+                        <div class="period-selector">
+                            <select id="periodFilter">
+                                <option value="monthly">Monthly Budgets</option>
+                                <option value="weekly">Weekly Budgets</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overview-content">
+                        <div class="overview-stats">
+                            <div class="stat-item">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-content">
+                                    <h4>Total Budget</h4>
+                                    <p class="stat-amount" id="totalBudget">$0.00</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">💸</div>
+                                <div class="stat-content">
+                                    <h4>Total Spent</h4>
+                                    <p class="stat-amount" id="totalSpent">$0.00</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">💰</div>
+                                <div class="stat-content">
+                                    <h4>Remaining</h4>
+                                    <p class="stat-amount" id="totalRemaining">$0.00</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-content">
+                                    <h4>Budget Health</h4>
+                                    <p class="stat-amount" id="budgetHealth">Good</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add/Edit Budget Form -->
+            <section class="form-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 id="formTitle">Set New Budget</h3>
+                        <button id="cancelEdit" class="btn btn-secondary" style="display: none;">Cancel Edit</button>
+                    </div>
+                    <form id="budgetForm" class="budget-form">
+                        <input type="hidden" id="editingBudgetId" value="">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Food">🍔 Food</option>
+                                    <option value="Transportation">🚗 Transportation</option>
+                                    <option value="Housing">🏠 Housing</option>
+                                    <option value="Utilities">⚡ Utilities</option>
+                                    <option value="Healthcare">🏥 Healthcare</option>
+                                    <option value="Entertainment">🎬 Entertainment</option>
+                                    <option value="Shopping">🛍️ Shopping</option>
+                                    <option value="Education">📚 Education</option>
+                                    <option value="Other">📦 Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="amount">Budget Amount (KES)</label>
+                                <input type="number" id="amount" name="amount" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="period">Budget Period</label>
+                                <select id="period" name="period" required>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="weekly">Weekly</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="description">Description (Optional)</label>
+                                <input type="text" id="description" name="description" placeholder="Budget description...">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Set Budget</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Budget Categories List -->
+            <section class="budgets-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Your Budgets</h3>
+                        <div class="view-controls">
+                            <button id="viewToggle" class="btn btn-outline">Grid View</button>
+                        </div>
+                    </div>
+                    <div class="budgets-container" id="budgetsContainer">
+                        <div class="loading-state">Loading budgets...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Budget Tips -->
+            <section class="tips-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>💡 Budget Tips</h3>
+                    </div>
+                    <div class="tips-content">
+                        <div class="tip-item">
+                            <div class="tip-icon">🎯</div>
+                            <div class="tip-text">
+                                <h4>Set Realistic Goals</h4>
+                                <p>Start with achievable budget amounts and adjust as you learn your spending patterns.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">📊</div>
+                            <div class="tip-text">
+                                <h4>Track Regularly</h4>
+                                <p>Check your budget progress weekly to stay on track and make adjustments if needed.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">💰</div>
+                            <div class="tip-text">
+                                <h4>Emergency Buffer</h4>
+                                <p>Always include a small buffer in your budget for unexpected expenses.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">🔄</div>
+                            <div class="tip-text">
+                                <h4>Review Monthly</h4>
+                                <p>Review and adjust your budgets monthly based on your actual spending patterns.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Message Display -->
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="../js/budgeting.js"></script>
+</body>
+</html>

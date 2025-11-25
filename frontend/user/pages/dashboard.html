@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Expense Manager</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 Expense Manager</h1>
+                <div class="user-info">
+                    <span id="welcomeMessage">Welcome, User!</span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+            <a href="expense-tracking.html" class="nav-link">💸 Expenses</a>
+            <a href="income-management.html" class="nav-link">💰 Income</a>
+            <a href="budgeting.html" class="nav-link">🎯 Budget</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Summary Cards -->
+            <section class="summary-section">
+                <div class="card summary-card income-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-content">
+                        <h3>Total Income</h3>
+                        <p class="amount" id="totalIncome">KSh 0.00</p>
+                        <small>This month</small>
+                    </div>
+                </div>
+
+                <div class="card summary-card expense-card">
+                    <div class="card-icon">💸</div>
+                    <div class="card-content">
+                        <h3>Total Expenses</h3>
+                        <p class="amount" id="totalExpenses">KSh 0.00</p>
+                        <small>This month</small>
+                    </div>
+                </div>
+
+                <div class="card summary-card balance-card">
+                    <div class="card-icon">💳</div>
+                    <div class="card-content">
+                        <h3>Balance</h3>
+                        <p class="amount" id="balance">KSh 0.00</p>
+                        <small>Remaining</small>
+                    </div>
+                </div>
+
+                <div class="card summary-card budget-card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-content">
+                        <h3>Budget Status</h3>
+                        <p class="amount" id="budgetStatus">Good</p>
+                        <small>Overall</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Expenses by Category</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="expenseChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Monthly Overview</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Transactions -->
+            <section class="recent-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Transactions</h3>
+                        <a href="expense-tracking.html" class="btn btn-primary btn-sm">View All</a>
+                    </div>
+                    <div class="transactions-list" id="recentTransactions">
+                        <div class="loading-state">Loading transactions...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/dashboard.js" type="module"></script>
+</body>
+</html>

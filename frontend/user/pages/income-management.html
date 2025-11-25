@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Management - Expense Manager</title>
+    <link rel="stylesheet" href="../css/income-management.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 Expense Manager</h1>
+                <div class="user-info">
+                    <span id="welcomeMessage">Welcome, User!</span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+            <a href="expense-tracking.html" class="nav-link">💸 Expenses</a>
+            <a href="income-management.html" class="nav-link active">💰 Income</a>
+            <a href="budgeting.html" class="nav-link">🎯 Budget</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Add Income Form -->
+            <section class="form-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Add New Income</h3>
+                    </div>
+                    <form id="incomeForm" class="income-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="amount">Amount (KES)</label>
+                                <input type="number" id="amount" name="amount" step="0.01" min="0.01" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="source">Income Source</label>
+                                <select id="source" name="source" required>
+                                    <option value="">Select Source</option>
+                                    <option value="Salary">💼 Salary</option>
+                                    <option value="Freelance">💻 Freelance</option>
+                                    <option value="Business">🏢 Business</option>
+                                    <option value="Investment">📈 Investment</option>
+                                    <option value="Rental">🏠 Rental</option>
+                                    <option value="Gift">🎁 Gift</option>
+                                    <option value="Bonus">🎉 Bonus</option>
+                                    <option value="Other">📦 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="date">Date</label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="description">Description (Optional)</label>
+                                <input type="text" id="description" name="description" placeholder="Add a description...">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Income</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Income Summary -->
+            <section class="summary-section">
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="card-icon">💰</div>
+                        <div class="card-content">
+                            <h4>This Month</h4>
+                            <p class="amount" id="monthlyTotal">KSh 0.00</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">📊</div>
+                        <div class="card-content">
+                            <h4>Total Income</h4>
+                            <p class="amount" id="totalIncome">KSh 0.00</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">🏆</div>
+                        <div class="card-content">
+                            <h4>Top Source</h4>
+                            <p class="amount" id="topSource">-</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">📈</div>
+                        <div class="card-content">
+                            <h4>Average Monthly</h4>
+                            <p class="amount" id="averageMonthly">KSh 0.00</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Income vs Expenses Comparison -->
+            <section class="comparison-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Income vs Expenses (This Month)</h3>
+                    </div>
+                    <div class="comparison-content">
+                        <div class="comparison-item income-item">
+                            <div class="comparison-label">
+                                <span class="icon">💰</span>
+                                <span>Total Income</span>
+                            </div>
+                            <div class="comparison-amount income" id="comparisonIncome">KSh 0.00</div>
+                        </div>
+                        <div class="comparison-item expense-item">
+                            <div class="comparison-label">
+                                <span class="icon">💸</span>
+                                <span>Total Expenses</span>
+                            </div>
+                            <div class="comparison-amount expense" id="comparisonExpenses">KSh 0.00</div>
+                        </div>
+                        <div class="comparison-divider"></div>
+                        <div class="comparison-item balance-item">
+                            <div class="comparison-label">
+                                <span class="icon">💳</span>
+                                <span>Net Balance</span>
+                            </div>
+                            <div class="comparison-amount balance" id="comparisonBalance">KSh 0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Income List -->
+            <section class="income-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Your Income</h3>
+                        <div class="filter-controls">
+                            <select id="sourceFilter">
+                                <option value="">All Sources</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Business">Business</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Rental">Rental</option>
+                                <option value="Gift">Gift</option>
+                                <option value="Bonus">Bonus</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="month" id="monthFilter" class="month-filter">
+                        </div>
+                    </div>
+                    <div class="income-list" id="incomeList">
+                        <div class="loading-state">Loading income...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Message Display -->
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="../js/income-management.js"></script>
+</body>
+</html>
