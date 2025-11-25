@@ -1,0 +1,32 @@
+{
+  "name": "expense-management-system",
+  "version": "1.0.0",
+  "description": "A simple expense management system for tracking expenses, income, and budgets",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "expense",
+    "budget",
+    "finance",
+    "management",
+    "tracking"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.10.0", 
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
